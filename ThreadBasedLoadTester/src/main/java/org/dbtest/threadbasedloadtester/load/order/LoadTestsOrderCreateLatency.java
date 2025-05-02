@@ -1,14 +1,14 @@
-package org.dbtest.threadbasedloadtester.load;
+package org.dbtest.threadbasedloadtester.load.order;
 
-import org.dbtest.threadbasedloadtester.latency.*;
+import org.dbtest.threadbasedloadtester.latency.CreateLatency;
+import org.dbtest.threadbasedloadtester.latency.order.CreateOrderLatency;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class LoadTestsCreateLatency {
-
-    private static final int THREAD_COUNT = 9;
+public class LoadTestsOrderCreateLatency {
+    private static final int THREAD_COUNT = 1;
 
     public static void main(String[] args) {
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -16,7 +16,7 @@ public class LoadTestsCreateLatency {
         System.out.println("\n Startar CRUD-operationer...");
         for (int i = 0; i < THREAD_COUNT; i++) {
             System.out.println("\n Startar latensmätning...");
-            executor.submit(CreateLatency::runTest);
+            executor.submit(CreateOrderLatency::runTest);
         }
 
         executor.shutdown();
@@ -28,5 +28,4 @@ public class LoadTestsCreateLatency {
 
         System.out.println("\n Load Test Completed!");
     }
-
 }

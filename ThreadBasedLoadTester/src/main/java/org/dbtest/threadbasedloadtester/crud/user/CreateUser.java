@@ -1,32 +1,30 @@
-package org.dbtest.threadbasedloadtester.crud;
+package org.dbtest.threadbasedloadtester.crud.user;
 
-import com.jayway.jsonpath.internal.Utils;
-import org.dbtest.threadbasedloadtester.utils.*;
-
+import org.dbtest.threadbasedloadtester.crud.CrudUtils;
+import org.dbtest.threadbasedloadtester.utils.HttpClientUtil;
 
 import java.net.http.HttpResponse;
 
-public class Create {
+public class CreateUser {
     public static CrudUtils crudUtils = new CrudUtils();
-    private static final String BASE_URL = "http://localhost:8080/api/products";
-    private static final int PRODUCTS_PER_THREAD = crudUtils.nr; // Hur många produkter varje tråd skapar
-    private static int threadCounter = 0; // För att ge varje tråd ett unikt start-ID
+    private static final String BASE_URL = "http://localhost:8080/api/user";
+    private static final int USERS_PER_THREAD = crudUtils.nr; // How many orders each thread will create
+    private static int threadCounter = 0; // Used to assign each thread a unique starting ID
 
+    // Synchronized method to get the next starting ID for a thread
     public static synchronized int getNextThreadStart() {
-        return threadCounter++ * PRODUCTS_PER_THREAD + 1;
+        return threadCounter++ * USERS_PER_THREAD + 1;
     }
 
     public static void runTest() {
         int startId = getNextThreadStart();
-        int endId = startId + PRODUCTS_PER_THREAD - 1;
+        int endId = startId + USERS_PER_THREAD - 1;
 
         for (int i = startId; i <= endId; i++) {
             String jsonPayload = """
                     {
-                        "name": "Product %d",
-                        "description": "Load test item %d",
-                        "price": 2750.00,
-                        "stock": 10
+                        "name": "User %d",
+                        "userOrders": []
                     }
                     """.formatted(i, i);
 
