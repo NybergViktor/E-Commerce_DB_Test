@@ -12,18 +12,28 @@ public class HttpClientUtil {
         try {
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url));
 
-            switch (method) {
-                case "POST" -> requestBuilder.POST(HttpRequest.BodyPublishers.ofString(jsonBody));
-                case "PUT" -> requestBuilder.PUT(HttpRequest.BodyPublishers.ofString(jsonBody));
+            switch (method.toUpperCase()) {
+                case "POST" -> {
+                    requestBuilder.POST(HttpRequest.BodyPublishers.ofString(jsonBody));
+                    requestBuilder.header("Content-Type", "application/json");
+                }
+                case "PUT" -> {
+                    requestBuilder.PUT(
+                            jsonBody != null ? HttpRequest.BodyPublishers.ofString(jsonBody) : HttpRequest.BodyPublishers.noBody()
+                    );
+                    requestBuilder.header("Content-Type", "application/json");
+                }
                 case "DELETE" -> requestBuilder.DELETE();
-                default -> requestBuilder.GET();
+                case "GET" -> requestBuilder.GET();
+                default -> throw new IllegalArgumentException("Unsupported HTTP method: " + method);
             }
 
-            requestBuilder.header("Content-Type", "application/json");
             return client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+
         } catch (Exception e) {
             System.err.println("Request failed: " + e.getMessage());
             return null;
         }
     }
+
 }

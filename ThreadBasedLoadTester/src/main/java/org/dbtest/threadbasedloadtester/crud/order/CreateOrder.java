@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 
 public class CreateOrder {
     public static CrudUtils crudUtils = new CrudUtils();
-    private static final String BASE_URL = "http://localhost:8080/api/orders";
+    private static final String BASE_URL = "http://localhost:8080/api/order";
     private static final int ORDERS_PER_THREAD = crudUtils.nr; // How many orders each thread will create
     private static int threadCounter = 0; // Used to assign each thread a unique starting ID
 

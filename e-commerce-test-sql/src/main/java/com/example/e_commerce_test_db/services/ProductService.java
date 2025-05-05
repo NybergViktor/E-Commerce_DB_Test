@@ -17,17 +17,6 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getAllProductsSortedByPriceDesc() {
-        return productRepository.findAll()
-                .stream()
-                .sorted((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()))
-                .toList();
-    }
-
-    public List<Product> searchProductsByName(String name) {
-        return productRepository.findByNameContainingIgnoreCase(name);
-    }
-
     public void deleteProductById(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
@@ -38,4 +27,9 @@ public class ProductService {
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
+
+    public List<Product> advancedSearch(String name, double minPrice, double maxPrice, String sortBy, boolean ascending) {
+        return productRepository.advancedSearch(name, minPrice, maxPrice, sortBy, ascending);
+    }
+
 }

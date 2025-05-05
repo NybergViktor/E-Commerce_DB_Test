@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LoadTestsCreate {
 
-    private static final int THREAD_COUNT = 20;
+    private static final int THREAD_COUNT = 1;
 
     public static void main(String[] args) {
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);

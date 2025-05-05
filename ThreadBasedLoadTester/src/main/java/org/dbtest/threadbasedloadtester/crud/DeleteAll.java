@@ -10,7 +10,7 @@ public class DeleteAll {
     public static void runTest() {
         HttpResponse<String> response = HttpClientUtil.sendRequest(BASE_URL, "DELETE", null);
         if (response != null) {
-            System.out.println("DELETE all " + response.body());
+            System.out.println("DELETE all PRODUCTS " + response.body());
         } else {
             System.out.println("DELETE request failed:");
         }

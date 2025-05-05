@@ -4,6 +4,7 @@ import com.example.e_commerce_test_db.models.Product;
 import com.example.e_commerce_test_db.repositories.ProductRepository;
 import com.example.e_commerce_test_db.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,16 +20,13 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    // Hämta alla produkter, sorterade efter pris (högst till lägst)
-    @GetMapping
-    public List<Product> getAllProductsSortedByPrice() {
-        return productService.getAllProductsSortedByPriceDesc();
-    }
-
-    // Sök produkter efter namn
-    @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String name) {
-        return productService.searchProductsByName(name);
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllProducts() {
+        try {
+            return ResponseEntity.ok(productRepository.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error finding all products: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -41,9 +39,25 @@ public class ProductController {
         productRepository.deleteAll();
     }
 
-    // Lägg till en ny produkt
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
         return productService.addProduct(product);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") double minPrice,
+            @RequestParam(defaultValue = "100000") double maxPrice,
+            @RequestParam(defaultValue = "price") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending) {
+        try {
+            List<Product> results = productService.advancedSearch(name, minPrice, maxPrice, sortBy, ascending);
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error searching products: " + e.getMessage());
+        }
+    }
+
 }

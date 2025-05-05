@@ -11,9 +11,7 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
-    private List<Product> products;
-    private double total_price;
-    private int amount_of_products;
+    private List<String> products;
     private String buyer_id;
 
 }

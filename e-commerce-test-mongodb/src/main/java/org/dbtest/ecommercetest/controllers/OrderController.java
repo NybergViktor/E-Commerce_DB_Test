@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/order")
 public class OrderController {
     private final OrderService orderService;
     private final OrderRepository orderRepository;
@@ -24,13 +24,22 @@ public class OrderController {
         return orderService.addOrder(orderDTO);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/deleteall")
     public ResponseEntity<?> deleteAllOrders() {
         try {
             orderRepository.deleteAll();
             return ResponseEntity.ok("All orders deleted.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error deleting orders: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllOrders() {
+        try {
+            return ResponseEntity.ok(orderRepository.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error finding all orders: " + e.getMessage());
         }
     }
 }

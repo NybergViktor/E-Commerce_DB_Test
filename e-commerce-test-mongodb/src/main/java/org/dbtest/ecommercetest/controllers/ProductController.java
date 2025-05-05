@@ -20,11 +20,6 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return service.getAllProducts();
-    }
-
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable String id) {
         return service.getProductById(id);
@@ -54,5 +49,30 @@ public class ProductController {
             return ResponseEntity.status(500).body("Error deleting products: " + e.getMessage());
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") double minPrice,
+            @RequestParam(defaultValue = "100000") double maxPrice,
+            @RequestParam(defaultValue = "price") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending) {
+
+        try {
+            return ResponseEntity.ok(service.advancedSearch(name, minPrice, maxPrice, sortBy, ascending));
+
+        } catch (Exception e) {
+            e.printStackTrace(); // <- detta behövs!
+            return ResponseEntity.status(500).body("Error searching products: " + e.getMessage());
+        }
+
+    }
+    
+
+    @GetMapping("/all")
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
 
 }

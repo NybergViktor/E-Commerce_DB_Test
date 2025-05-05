@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/order")
 public class UserOrderController {
 
     private final OrderService orderService;
@@ -30,9 +30,13 @@ public class UserOrderController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<UserOrder>> getAllOrders() {
-        return ResponseEntity.ok(orderService.getAllOrders());
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllOrders() {
+        try {
+            return ResponseEntity.ok(orderRepository.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error finding all orders: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
@@ -42,7 +46,7 @@ public class UserOrderController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping
+    @DeleteMapping("/deleteall")
     public void deleteAllOrders() {
         orderRepository.deleteAll();
     }

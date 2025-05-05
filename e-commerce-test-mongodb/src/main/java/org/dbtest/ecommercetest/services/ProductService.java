@@ -14,10 +14,6 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public List<Product> getAllProducts() {
-        return repository.findAll();
-    }
-
     public Product getProductById(String id) {
         return repository.findById(id).orElse(null);
     }
@@ -40,5 +36,9 @@ public class ProductService {
 
     public void deleteProduct(String id) {
         repository.deleteById(id);
+    }
+
+    public List<Product> advancedSearch(String name, double min, double max, String sortBy, boolean ascending) {
+        return repository.search(name, min, max, sortBy, ascending);
     }
 }
